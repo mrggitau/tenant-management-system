@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data><variable name="tenant" type="com.example.tenantmanagementsystem_lab5.Tenant" /></data>
+    <data>
+        <variable name="tenant" type="com.example.tenantmanagementsystem_lab5.data.model.Tenant" />
+    </data>
     <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="24dp">
             <TextView android:id="@+id/newTenantTextView" android:layout_width="0dp" android:layout_height="wrap_content" android:text="@{tenant.summary()}" android:padding="16dp" android:background="#E8E8E7" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />

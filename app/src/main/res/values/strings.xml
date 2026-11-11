@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TenantManagementSystem_lab5</string>
+    <string name="tenant_count">Tenants\n%1$d</string>
+    <string name="total_rent">Total rent\nKSh %1$.0f</string>
 </resources>
