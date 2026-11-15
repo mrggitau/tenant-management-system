@@ -7,14 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import com.example.tenantmanagementsystem_lab5.data.repository.TenantRepository
 import com.example.tenantmanagementsystem_lab5.databinding.FragmentViewTenantsBinding
+import com.example.tenantmanagementsystem_lab5.ui.viewmodel.TenantViewModel
 
 class ViewTenantsFragment : Fragment() {
     private var _binding: FragmentViewTenantsBinding? = null
     private val binding get() = _binding!!
     private val args: ViewTenantsFragmentArgs by navArgs()
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentViewTenantsBinding.inflate(inflater, container, false)
@@ -23,6 +25,7 @@ class ViewTenantsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val newTenant = args.newTenant
         binding.tenant = newTenant
 
@@ -30,13 +33,18 @@ class ViewTenantsFragment : Fragment() {
             binding.newTenantGroup.visibility = View.GONE
         } else {
             binding.callButton.setOnClickListener {
-                startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${newTenant.phone}")))
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${newTenant.phone}"))
+                startActivity(intent)
             }
         }
 
-        val tenants = TenantRepository.tenants
-        binding.allTenantsTextView.text = if (tenants.isEmpty()) "No tenants." else tenants.joinToString("\n\n") { it.summary() }
+        viewModel.allTenantsText.observe(viewLifecycleOwner) { text ->
+            binding.allTenantsTextView.text = text
+        }
     }
 
-    override fun onDestroyView() { super.onDestroyView(); _binding = null }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
