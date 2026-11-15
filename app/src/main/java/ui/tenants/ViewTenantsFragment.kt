@@ -7,14 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import com.example.tenantmanagementsystem_lab5.data.repository.TenantRepository
 import com.example.tenantmanagementsystem_lab5.databinding.FragmentViewTenantsBinding
+import com.example.tenantmanagementsystem_lab5.ui.viewmodel.TenantViewModel
 
 class ViewTenantsFragment : Fragment() {
     private var _binding: FragmentViewTenantsBinding? = null
     private val binding get() = _binding!!
     private val args: ViewTenantsFragmentArgs by navArgs()
+
+    // The SHARED ViewModel: every Fragment in MainActivity gets the SAME one
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentViewTenantsBinding.inflate(inflater, container, false)
@@ -34,8 +38,10 @@ class ViewTenantsFragment : Fragment() {
             }
         }
 
-        val tenants = TenantRepository.tenants
-        binding.allTenantsTextView.text = if (tenants.isEmpty()) "No tenants." else tenants.joinToString("\n\n") { it.summary() }
+        // OBSERVER: runs now, and again every time allTenantsText changes
+        viewModel.allTenantsText.observe(viewLifecycleOwner) { text ->
+            binding.allTenantsTextView.text = text
+        }
     }
 
     override fun onDestroyView() { super.onDestroyView(); _binding = null }
